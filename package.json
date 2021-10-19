@@ -1,0 +1,29 @@
+{
+  "name": "j4x-api-collection",
+  "version": "1.0.0",
+  "description": "An attempt to help the Joomla! 4 early adopters mainly focused for developers. It's an unofficial Postman collection of official Joomla 4 beta API",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bato3/j4x-api-collection.git"
+  },
+  "keywords": [],
+  "author": "bato3 (work)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bato3/j4x-api-collection/issues"
+  },
+  "homepage": "https://github.com/bato3/j4x-api-collection#readme",
+  "dependencies": {
+    "json5": "^2.2.0",
+    "node-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
