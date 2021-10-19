@@ -1,6 +1,7 @@
 
 import JSON5 from 'json5'
 import fetch from 'node-fetch'
+import {writeFile} from 'fs/promises'
 
 
 
@@ -41,11 +42,7 @@ const targetFile = "j4x-api-complete-collection.postman_collection.json";
                 .replace(/[\{]+/g,'{').replace(/[\}]+/g,'}')
         collection.item[i].name = url
 
-        /// normalize JSON body
-        if(item.request.body && item.request.body.raw) {
-            collection.item[i].request.body.raw = JSON.stringify(
-                    JSON5.parse(item.request.body.raw))
-        }
+
 
         /// normalize url
         const urlParts = url.replace(/[\{]+/g,'{{').replace(/[\}]+/g,'}}').split('/')
@@ -62,13 +59,39 @@ const targetFile = "j4x-api-complete-collection.postman_collection.json";
                 one = one.replace(/[\{\}]+/g,'');
                 variables[one] = {
                     key: one,
-                    value: one == 'app'? '{site|administrator}':`{${one}}`
+                    value: one == 'app'? '(site|administrator)':`{${one}}`
                 }
             })
         }
 
+        /// fix descriptions
+        collection.item[i].request.description = `Generated from a curl request: \ncurl -X ${item.request.method} '${collection.item[i].request.url.raw}' -H 'X-Joomla-Token: {{auth_apikey}}'`
+
+
+        /// normalize JSON body
+        if(item.request.body && item.request.body.raw) {
+            collection.item[i].request.body.raw = JSON.stringify(
+                    JSON5.parse(item.request.body.raw))
+            collection.item[i].request.description += ` -H 'Content-Type: application/json' -d '${collection.item[i].request.body.raw.replace("'","'\\''")}'`
+        }
+
 
     });
+
+    collection.variable = [];
+    for(let x in variables)
+        collection.variable[collection.variable.length] = variables[x]
+
+    /// set apikey as variable
+    collection.auth.apikey[0].value = '{{auth_apikey}}'
+
+
+    const out = JSON.stringify(collection,null,"\t")
+    console.log(out)
+    await writeFile(targetFile,out)
+    return;
+
+
     console.log(collection.item[23].name
         , collection.item[23].request, collection.item[25].request
         );
