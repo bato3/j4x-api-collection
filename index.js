@@ -27,7 +27,7 @@ const targetFile = "j4x-api-complete-collection.postman_collection.json";
         },
         "base_path": {
             key:    "base_path",
-            value:  "api/index.php/v1/"
+            value:  "api/index.php/v1"
         },
         "auth_apikey": {
             key: "auth_apikey",
